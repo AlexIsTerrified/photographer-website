@@ -6,6 +6,7 @@
 
 
 function resizeImage($resource, $width,$height){
+
 	if($width > 3000 || $height > 3000){
 		$nWidth = $width/4;
 		$nHeight = $height/4;
@@ -23,10 +24,12 @@ function resizeImage($resource, $width,$height){
 		$nHeight = $height;
 	}
 	
-	$imageLayer = Imagecreatetruecolor($nWidth,$nHeight);
+	$imageLayer = imagecreatetruecolor($nWidth,$nHeight);
 	imagecopyresampled($imageLayer,$resource,0,0,0,0,$nWidth,$nHeight,$width,$height);
 	return $imageLayer;
 }
+
+
  $pic_error = 'choose an image';
   if(isset($_FILES['file']['name'])){
  $pic = $_FILES['file']['name'];
@@ -42,78 +45,53 @@ function resizeImage($resource, $width,$height){
  if(isset($_POST['name'])  && !$_POST['name']==" "){$pic = $_POST['name'];}
   if(isset($_POST['desc']) && !$_POST['desc']==" "){$pic_desc = $_POST['desc'];}
 	 if(!empty($pic)){
-		 if($pic_size<=8000000 && preg_match("/\.(jpg|jpeg|png|gif)$/i",$_FILES['file']['name']) && !file_exists ('./img/'.$pic.'.jpg')){
-		 switch($imagetype){
-			 case IMAGETYPE_JPEG:
-				$resourcetype = imagecreatefromjpeg($pic_temp);
-				$imagelayer = resizeImage($resourcetype,$imagewidth,$imageheight);
-				if(imagejpeg($imagelayer,'./img/'.time().'.'.$pic_ext))$pic_error='uploaded';
-				$picName = $_POST['name'];
-				$pic_desc = $_POST['desc'];
-				$add = "INSERT INTO `ig` (`ID`, `Name`, `url`, `Description`) VALUES (NULL, '".$picName."', './img/".time()."'.'".$pic_ext."', '".$pic_desc."');";
-				$conn ->query($add);
-				$_FILE=array();
-				$_POST = array();
+		 if($pic_size<=8000000 && preg_match("/\.(jpg|jpeg)$/i",$_FILES['file']['name']) && !file_exists ('./img/'.$pic.'.jpg')){
+			switch($imagetype){
+				case IMAGETYPE_JPEG:
+					$resourcetype = imagecreatefromjpeg($pic_temp);
+					$imagelayer = resizeImage($resourcetype,$imagewidth,$imageheight);
+					if(imagejpeg($imagelayer,'./img/'.time().'.'.$pic_ext))$pic_error='uploaded';
+					$picName = $_POST['name'];
+					$pic_desc = $_POST['desc'];
+					$add = 'INSERT INTO `pics` (`ID`, `Name`, `Image`, `Description`) VALUES (NULL, "'.$picName.'", "./img/'.time().'.'.$pic_ext.'", "'.$pic_desc.'")';
+					$conn ->query($add);
+					$_FILE=array();
+					$_POST = array();
+					break;
+				case IMAGETYPE_PNG:
+					$resourcetype = imagecreatefrompng($pic_temp);
+					$imagelayer = resizeImage($resourcetype,$imagewidth,$imageheight);
+					if(imagepng($imagelayer,'./img/'.time().'.'.$pic_ext))$pic_error='uploaded';
+					$picName = $_POST['name'];
+					$pic_desc = $_POST['desc'];
+					$add = "INSERT INTO `pics` (`ID`, `Name`, `Image`, `Description`) VALUES (NULL, `".$picName."`, `./img/".time().".".$pic_ext."`, `".$pic_desc."`)";
+					$conn ->query($add);
+					$_FILE=array();
+					$_POST = array();
+					break;
+				case IMAGETYPE_GIF:
+					$resourcetype = imagecreatefromgif($pic_temp);
+					$imagelayer = resizeImage($resourcetype,$imagewidth,$imageheight);
+					if(imagegif($imagelayer,'./img/'.time().'.'.$pic_ext))$pic_error='uploaded';
+					$picName = $_POST['name'];
+					$pic_desc = $_POST['desc'];
+					$add = "INSERT INTO `pics` (`ID`, `Name`, `Image`, `Description`) VALUES (NULL, `".$picName."`, `./img/".time().".".$pic_ext."`, `".$pic_desc."`)";
+					$conn ->query($add);
+					$_FILE=array();
+					$_POST = array();
+					break;
+				default:
 				break;
-			case IMAGETYPE_PNG:
-				$resourcetype = imagecreatefrompng($pic_temp);
-				$imagelayer = resizeImage($resourcetype,$imagewidth,$imageheight);
-				if(imagepng($imagelayer,'./img/'.time().'.'.$pic_ext))$pic_error='uploaded';
-				$picName = $_POST['name'];
-				$pic_desc = $_POST['desc'];
-				$add = "INSERT INTO `ig` (`ID`, `Name`, `url`, `Description`) VALUES (NULL, '".$picName."', './img/".time()."'.'".$pic_ext."', '".$pic_desc."');";
-				$conn ->query($add);
-				$_FILE=array();
-				$_POST = array();
-				break;
-			case IMAGETYPE_GIF:
-				$resourcetype = imagecreatefromgif($pic_temp);
-				$imagelayer = resizeImage($resourcetype,$imagewidth,$imageheight);
-				if(imagegif($imagelayer,'./img/'.time().'.'.$pic_ext))$pic_error='uploaded';
-				$picName = $_POST['name'];
-				$pic_desc = $_POST['desc'];
-				$add = "INSERT INTO `ig` (`ID`, `Name`, `url`, `Description`) VALUES (NULL, '".$picName."', './img/".time()."'.'".$pic_ext."', '".$pic_desc."');";
-				$conn ->query($add);
-				$_FILE=array();
-				$_POST = array();
-				break;
-			default:
-			break;
+			}
 		 }
 		 }else{$pic_error = 'File size must be less than 8MB and an image.';}
 	 }
- }
- $query = 'SELECT `url`,`Name`,`Description`, `ID` FROM `ig` order by id desc ';
+	 $delete_prompt = 'Choose a post to delete';
+	 if(isset($_GET["delete"])){
+		$delete = 'DELETE FROM `pics` WHERE `pics`.`ID` = '.$_GET["delete"];
+		$runDelete = $conn ->query($delete);
+		$delete_prompt = 'post deleted';
+	 }
+ $query = 'SELECT `Image`,`Name`,`Description`, `ID` FROM `pics` order by id desc ';
  $run = $conn ->query($query);
-	$r[] = null; 
-	$c[] = null;
-	$l[] = null;
-	$rn[] = null; 
-	$cn[] = null;
-	$ln[] = null;
-	$rd[] = null; 
-	$cd[] = null;
-	$ld[] = null;
-	$ri[] = null; 
-	$ci[] = null;
-	$li[] = null;
-    $a = 1;	
-	while($d = $run->fetch_assoc()){	
-	 if($a%3==0){
-		 $r[$a] = $d['url'];
-		 $ri[$a] = $d['ID'];
-		 $rn[$a] = $d['Name'];
-		 $rd[$a] = $d['Description'];
-	 }else if($a%2==0){
-		 $l[$a] = $d['url'];
-		 $li[$a] = $d['ID'];
-		 $ln[$a] = $d['Name'];
-		 $ld[$a] = $d['Description'];
-	 }else {
-		 $c[$a] = $d['url'];
-		 $ci[$a] = $d['ID'];
-		 $cn[$a] = $d['Name'];
-		 $cd[$a] = $d['Description'];
-	 }$a=$a+1;
-	}
 ?>
