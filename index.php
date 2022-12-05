@@ -28,14 +28,14 @@
 		<img src="./img/propic.jpg"></img>
 	</div><br>
 	<div class="cript">
-	<h2>Lorem ipsum</h2>
+	<h2>Photographey Portfolio</h2>
 	<div class="socialM">
 		<a ><button class="social-nav" style="background-image:url('./img/fbicon.png')"></button></a>
 		<a ><button class="social-nav" style="background-image:url('./img/twittericon.png')"></button></a>
 		<a ><button class="social-nav" style="background-image:url('./img/igicon.png')"></button></a>
 		<a ><button class="social-nav" style="background-image:url('./img/youtubeicon.png')"></button></a>
 	</div>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget libero sit amet sapien cursus consectetur.
+	<p>Pretend this is a short bio of a real person. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget libero sit amet sapien cursus consectetur.
 	Aliquam sit amet nunc elit. Morbi at dignissim dolor, in ultrices est. Nulla consectetur elit ac ipsum efficitur lacinia.</p>
 	</div>
 	 </section class="content">
