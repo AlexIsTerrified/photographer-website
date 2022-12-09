@@ -13,12 +13,12 @@
       echo $pic_error;
       ?>
     </b>
-      <input type="file" name='file' accept="image/x-png,image/gif,image/jpeg" required="required"><br>
+      <input type="file" name='file' accept="image/x-png,image/gif,image/jpeg" required><br>
     <b>NAME</b><br>
-    <input type="text" name="name" placeholder="Name" value=" "><br>
+    <input type="text" name="name" placeholder="Name" value=" " required><br>
     <b>DESCRIPTION</b><br>
-    <input type="text" name="desc" placeholder="Description" id="desc" value=" "><br>
-    <input type="submit" value="submit" class="submit"></form>
+    <input type="text" name="desc" placeholder="Description" id="desc" value=" " required><br>
+    <input type="submit" value="submit" class="submit" required></form>
     </form>
     <div class="list">
       <?php

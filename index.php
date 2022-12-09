@@ -28,7 +28,7 @@
 		<img src="./img/propic.jpg"></img>
 	</div><br>
 	<div class="cript">
-	<h2>Photographey Portfolio</h2>
+	<h2>Photographer's Portfolio</h2>
 	<div class="socialM">
 		<a ><button class="social-nav" style="background-image:url('./img/fbicon.png')"></button></a>
 		<a ><button class="social-nav" style="background-image:url('./img/twittericon.png')"></button></a>
